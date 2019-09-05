@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../utils/colors.dart';
 
 class CategoryCard extends StatefulWidget {
   final int index;
@@ -80,7 +81,7 @@ class _CategoryCardState extends State<CategoryCard> {
     if (widget.selectedCardIndex == index) {
       return color;
     } else {
-      return Colors.grey.withOpacity(0.2);
+      return CustomColors.unselectedCardColor;
     }
   }
 }

@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_ghana_ui_challenge_week_1/widgets/category_card.dart';
+import '../widgets/video_card.dart';
+import '../router.dart';
+import '../widgets/category_card.dart';
+import '../widgets/photo_card.dart';
 import '../utils/colors.dart';
 import '../utils/utils.dart';
 
@@ -8,12 +11,75 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage>
+    with SingleTickerProviderStateMixin {
+  TabController tabController;
+  int selectedTabIndex = 0;
+  final List<String> _tabs = [
+    "CHAT",
+    "FEATURED",
+    "POPULAR",
+    "FOLLOWERS",
+    "LIKES"
+  ];
+
+  final List<String> _photos = [
+    "",
+    AvailableImages.bleach,
+    AvailableImages.saitama,
+    AvailableImages.luffy,
+    AvailableImages.naruto,
+    AvailableImages.natsu,
+    AvailableImages.mikasa,
+  ];
+
+  final List<String> _videos = [
+    AvailableImages.rom,
+    AvailableImages.rom2,
+  ];
+
+  @override
+  void initState() {
+    super.initState();
+    tabController = TabController(vsync: this, length: _tabs.length);
+  }
+
   int selectedCardIndex = 0;
 
   @override
   Widget build(BuildContext context) {
-    final _appBar = AppBar();
+    final screenWidth = MediaQuery.of(context).size.width;
+
+    final _userImage = GestureDetector(
+      onTap: () => Navigator.pushNamed(context, notificationsViewRoute),
+      child: Container(
+        margin: EdgeInsets.only(right: 20.0, top: 20.0),
+        height: 40.0,
+        width: 37.0,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(15.0),
+          image: DecorationImage(
+            image: AssetImage(AvailableImages.assassin),
+            fit: BoxFit.cover,
+          ),
+        ),
+      ),
+    );
+
+    final _appBar = AppBar(
+      leading: Padding(
+        padding: EdgeInsets.only(left: 10.0),
+        child: GestureDetector(
+          onTap: () => Navigator.pushNamed(context, notificationsViewRoute),
+          child: Image.asset(
+            AvailableImages.hamburger,
+            width: 2.0,
+            fit: BoxFit.contain,
+          ),
+        ),
+      ),
+      actions: <Widget>[_userImage],
+    );
 
     final _headerText = Container(
       child: Text(
@@ -44,6 +110,87 @@ class _HomePageState extends State<HomePage> {
       ),
     );
 
+    final _tabSection = Container(
+      padding: EdgeInsets.only(top: 30.0),
+      child: TabBar(
+        onTap: (index) {
+          setState(() {
+            selectedTabIndex = index;
+          });
+        },
+        controller: tabController,
+        unselectedLabelColor: Colors.grey.withOpacity(0.6),
+        isScrollable: true,
+        indicator: BoxDecoration(
+          color: CustomColors.primaryColor.withOpacity(0.3),
+          borderRadius: BorderRadius.circular(12.0),
+        ),
+        tabs: _tabs.map((tab) {
+          var index = _tabs.indexOf(tab);
+          return Tab(
+            child: Text(
+              tab,
+              style: switchColor(index),
+            ),
+          );
+        }).toList(),
+      ),
+    );
+
+    final _photosSection = Container(
+      padding: EdgeInsets.only(top: 30.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text(
+            "My photos",
+            style: AppTextStyles.subHeaderTextStyle,
+          ),
+          SizedBox(height: 10.0),
+          Container(
+            height: screenWidth * 0.32,
+            child: ListView.builder(
+              itemCount: _photos.length,
+              scrollDirection: Axis.horizontal,
+              itemBuilder: (BuildContext context, int index) {
+                var photo = _photos[index];
+                return PhotoCard(
+                  photo: photo,
+                );
+              },
+            ),
+          )
+        ],
+      ),
+    );
+
+    final _videosSection = Container(
+      padding: EdgeInsets.only(top: 30.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text(
+            "My videos",
+            style: AppTextStyles.subHeaderTextStyle,
+          ),
+          SizedBox(height: 10.0),
+          Container(
+            height: screenWidth * 0.32,
+            child: ListView.builder(
+              itemCount: _videos.length,
+              scrollDirection: Axis.horizontal,
+              itemBuilder: (BuildContext context, int index) {
+                var video = _videos[index];
+                return VideoCard(
+                  video: video,
+                );
+              },
+            ),
+          )
+        ],
+      ),
+    );
+
     return Scaffold(
       appBar: _appBar,
       body: SafeArea(
@@ -56,7 +203,10 @@ class _HomePageState extends State<HomePage> {
               children: <Widget>[
                 _headerText,
                 _descriptionText,
-                _categorySection
+                _categorySection,
+                _tabSection,
+                _photosSection,
+                _videosSection
               ],
             ),
           ),
@@ -78,10 +228,14 @@ class _HomePageState extends State<HomePage> {
       color: color,
       top: top,
       bottom: bottom,
-      onPressed: () {
-        selectCategory(index);
-      },
+      onPressed: () => selectCategory(index),
     );
+  }
+
+  TextStyle switchColor(index) {
+    return selectedTabIndex == index
+        ? AppTextStyles.selectedTabTextStyle
+        : AppTextStyles.unselectedTabTextStyle;
   }
 
   void selectCategory(int index) {
