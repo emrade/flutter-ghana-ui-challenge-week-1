@@ -1,5 +1,5 @@
-
 import 'package:flutter/material.dart';
+import 'utils/colors.dart';
 import 'utils/utils.dart';
 
 ThemeData buildThemeData() {
@@ -7,6 +7,10 @@ ThemeData buildThemeData() {
 
   return baseTheme.copyWith(
     primaryColor: CustomColors.primaryColor,
-    appBarTheme: AppBarTheme(color: CustomColors.appBarColor)
+    scaffoldBackgroundColor: CustomColors.scaffoldColor,
+    appBarTheme: AppBarTheme(
+      color: CustomColors.appBarColor,
+      elevation: 0,
+    ),
   );
 }
