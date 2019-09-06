@@ -6,12 +6,7 @@ import 'widgets/tab_section.dart';
 import '../../widgets/custom_appbar.dart';
 import '../../widgets/header.dart';
 
-class NotificationsPage extends StatefulWidget {
-  @override
-  _NotificationsPageState createState() => _NotificationsPageState();
-}
-
-class _NotificationsPageState extends State<NotificationsPage>{
+class NotificationsPage extends StatelessWidget {
   
   @override
   Widget build(BuildContext context) {
