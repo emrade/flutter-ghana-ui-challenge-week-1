@@ -17,12 +17,6 @@ class AppTextStyles {
     fontWeight: FontWeight.w800,
   );
 
-  static const descriptionTextStyle = const TextStyle(
-    fontSize: 18,
-    fontWeight: FontWeight.w500,
-    color: Colors.grey,
-  );
-
   static const unselectedTabTextStyle = const TextStyle(
     fontWeight: FontWeight.w600,
     color: Colors.grey,

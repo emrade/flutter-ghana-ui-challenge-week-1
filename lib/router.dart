@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'views/notifications.dart';
-import 'views/home.dart';
+import 'views/notifications/notifications.dart';
+import 'views/home/home.dart';
 
 const String homeViewRoute = '/';
 const String notificationsViewRoute = '/notifications';
